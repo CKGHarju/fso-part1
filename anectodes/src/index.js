@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const App = ({anecdotes}) => {
+const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const [anecdotes, setAnecdotes] = useState(
+    props.anecdotes.map((anecdote, id) => ({ id, text: anecdote, votes: 0}))
+  );
+
   const randomNumberMaxExclusive = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+
   const handleNext = () => {
     const nextIndex = randomNumberMaxExclusive(0, anecdotes.length)
     if (nextIndex === selected) {
@@ -13,11 +18,29 @@ const App = ({anecdotes}) => {
     setSelected(nextIndex)
   }
 
+  const handleVote = (id) => {
+    const iterator = (anecdote) => {
+      if (anecdote.id === id) {
+        return {
+          ...anecdote,
+          votes: anecdote.votes + 1
+        }
+      }
+      return anecdote;
+    }
+
+    setAnecdotes(anecdotes.map(iterator));
+  }
+
   return (
     <div>
       <p>
-        {anecdotes[selected]}
+        {anecdotes[selected].text}
       </p>
+      <p>
+        has {anecdotes[selected].votes} votes
+      </p>
+      <button onClick={() => handleVote(anecdotes[selected].id)}>Vote</button>
       <button onClick={handleNext}>Next anectode</button>
     </div>
   )
