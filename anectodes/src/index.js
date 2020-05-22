@@ -32,6 +32,18 @@ const App = (props) => {
     setAnecdotes(anecdotes.map(iterator));
   }
 
+  const mostVoted = () => {
+    let mostVoted = anecdotes[0];
+    anecdotes.forEach(anecdote => {
+      if (anecdote.votes > mostVoted.votes) {
+        mostVoted = anecdote;
+      }
+    })
+    return mostVoted;
+  }
+
+  const mostVotedAnecdote = mostVoted();
+
   return (
     <div>
       <p>
@@ -42,6 +54,13 @@ const App = (props) => {
       </p>
       <button onClick={() => handleVote(anecdotes[selected].id)}>Vote</button>
       <button onClick={handleNext}>Next anectode</button>
+      <h2>Anecdote with the most votes</h2>
+      <p>
+        {mostVotedAnecdote.text}
+      </p>
+      <p>
+        has {mostVotedAnecdote.votes} votes
+      </p>
     </div>
   )
 }
